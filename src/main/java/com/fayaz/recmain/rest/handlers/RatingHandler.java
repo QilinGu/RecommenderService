@@ -2,7 +2,6 @@ package com.fayaz.recmain.rest.handlers;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
 import java.util.List;
 
 import com.fayaz.hibernate.dao.CustomerDAO;
@@ -20,9 +19,7 @@ public class RatingHandler {
 		String hashGenerated = getHashFromPassword(customerSecret+salt);
 		String hashInDb = customer.getHash();
 		if(!hashGenerated.equals(hashInDb))
-			throw new RuntimeException("Customer Id - Secret COnfiguration mismatch");
-		
-		
+			throw new RuntimeException("Customer Id - Secret COnfiguration mismatch");		
 		RatingsDAO dao = new RatingsDAO();
 		int count = 0;
 		for(RatingItem item:ratings){

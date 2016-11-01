@@ -8,8 +8,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import org.codehaus.jackson.map.ObjectMapper;
-
 import com.fayaz.recmain.rest.handlers.RatingHandler;
 import com.fayaz.recmain.rest.pojo.BaseResponse;
 import com.fayaz.recmain.rest.pojo.PostRating;
@@ -20,15 +18,13 @@ public class RatingService {
 	
 	@POST
 	@Path("add")
-	@Consumes(MediaType.TEXT_HTML)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public BaseResponse addRating(String input){	
-		System.out.println("Printing FCC"+input);
+	public BaseResponse addRating(PostRating rating){	
 		RatingHandler handler = new RatingHandler();
 		BaseResponse response = new BaseResponse();
-		ObjectMapper mapper = new ObjectMapper();
 		try{
-			PostRating rating = mapper.readValue(input, PostRating.class);
+			//PostRating rating = mapper.readValue(input, PostRating.class);
 			List<RatingItem> ratingsList = rating.getRatings();
 			long customerId = rating.getCustomerId();
 			String customerSecret = rating.getCustomerSecret();
