@@ -7,6 +7,11 @@ public class BaseResponse {
 	
 	public BaseResponse(){}
 	
+	public BaseResponse(String status, String message) {
+		this.status = status;
+		this.statusMessage = message;
+	}
+
 	public String getStatus() {
 		return status;
 	}

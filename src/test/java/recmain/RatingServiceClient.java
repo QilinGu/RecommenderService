@@ -1,5 +1,9 @@
 package recmain;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -8,7 +12,6 @@ import java.util.List;
 
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.ObjectMapper;
 
 import com.fayaz.recmain.rest.pojo.BaseResponse;
 import com.fayaz.recmain.rest.pojo.PostRating;
@@ -20,36 +23,69 @@ import com.sun.jersey.api.client.config.DefaultClientConfig;
 import com.sun.jersey.api.json.JSONConfiguration;
 
 public class RatingServiceClient {
+	
+	private static final String BASE_URI = "http://localhost:8070/RecMain/rating/add";
+	private static final String DELIMITTER  = "\\t";
+	private static final String RATINGS_DATA = "ml-100k/u.data";
+	private static final long CUSTOMER_ID = 1;
+	private static final String CUSTOMER_SECRET = "grouplens";
+	
+	private WebResource webResource;
 
 	public static void main(String[] args) throws JsonParseException, JsonMappingException, IOException {
+		
+		RatingServiceClient client = new RatingServiceClient();
+		client.prepareWebResource();
+		client.parseRatingsFile();
+	}
+	
+	private void prepareWebResource() {
 		ClientConfig clientConfig = new DefaultClientConfig();              
 		clientConfig.getFeatures().put(JSONConfiguration.FEATURE_POJO_MAPPING, Boolean.TRUE);     
 		Client client = Client.create(clientConfig);
-
-		WebResource webResource = client.resource("http://localhost:8070/RecMain/rating/add");
-		RatingItem item = new RatingItem(12001,12001,3);
-    	ArrayList<RatingItem> ratingsList = new ArrayList<RatingItem>();
-    	ratingsList.add(item);
-    	
-    	PostRating postRatingRequest = new PostRating(2,"ecommerce",ratingsList);
-		BaseResponse response = webResource.accept("application/json")
-		                .type("application/json").post(BaseResponse.class, postRatingRequest);
-		System.out.println(response.getStatus());
-		System.out.println(response.getStatusMessage());
-		System.out.println(getHashFromPassword("ecommerceca4f4c97d76edeaf661375cdf9d6178c"));
-//		ObjectMapper mapper = new ObjectMapper();
-//		String input = "{\"customerId\": 2,\"customerSecret\": \"ecommerce\",\"ratings\": [{\"userId\": 12003,\"productId\":"
-//				+ " 12003,\"rating\": 4},{\"userId\": 12002,\"productId\": 12002,\"rating\": 3}]}";
-//		PostRating rating = mapper.readValue(input, PostRating.class);
-//		System.out.println(rating.getCustomerSecret());
-//		System.out.println(rating.getCustomerId());
-//		List<RatingItem> list2 = rating.getWrapper().getRatings();
-//		for(RatingItem ite3m:list2){
-//			System.out.println(ite3m.getProductId());
-//		}
-
+		webResource = client.resource(BASE_URI);
+		
 	}
 	
+	private void postRating(List<RatingItem> ratingsList){
+		
+		PostRating mainJson = new PostRating(CUSTOMER_ID,CUSTOMER_SECRET,ratingsList);
+		BaseResponse response = webResource.accept("application/json")
+				                .type("application/json").post(BaseResponse.class, mainJson);
+		System.out.println(response.getStatus());
+		System.out.println(response.getStatusMessage());
+	}
+	
+	private void parseRatingsFile(){
+		BufferedReader br = null;
+		try {
+			ClassLoader classLoader = getClass().getClassLoader();
+			File file = new File(classLoader.getResource(RATINGS_DATA).getFile());
+			br = new BufferedReader(new FileReader(file));
+			ArrayList<RatingItem> ratingsList = new ArrayList<RatingItem>();
+			String input;			
+			while((input=br.readLine())!=null){
+				String[] tokens = input.split(DELIMITTER);
+				long userId = Long.parseLong(tokens[0]);
+				long productId = Long.parseLong(tokens[1]);
+				long rating = Long.parseLong(tokens[2]);
+				ratingsList.add(new RatingItem(userId,productId,rating));
+			}
+			postRating(ratingsList);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}finally{
+			try {
+				br.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+
 	public static String getHashFromPassword(String saltPass) throws RuntimeException {
 		MessageDigest md = null;
 		try {

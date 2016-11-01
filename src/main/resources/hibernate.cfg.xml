@@ -12,5 +12,7 @@
         <!-- Mapping with model class containing annotations -->
 	<mapping class="com.fayaz.hibernate.pojo.Rating"/>
 	<mapping class="com.fayaz.hibernate.pojo.Customer"/>
+	<mapping class="com.fayaz.hibernate.pojo.CustomerConfig"/>
+	<mapping class="com.fayaz.hibernate.pojo.Algorithm"/>
     </session-factory>
 </hibernate-configuration>
