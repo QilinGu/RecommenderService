@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Context>
+<Context>
+    <Resource name="jdbc/recAdminDB" auth="Container"
+		type="javax.sql.DataSource" username="rec_admin" password="rec_pwd"
+		driverClassName="oracle.jdbc.driver.OracleDriver"
+		url="jdbc:oracle:thin:@localhost:1521:xe"
+		maxActive="100" maxIdle="30" maxWait="10000" />
+</Context>

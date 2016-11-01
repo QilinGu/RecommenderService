@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+        <property name="hibernate.connection.driver_class">oracle.jdbc.driver.OracleDriver</property>
+        <property name="hibernate.dialect">org.hibernate.dialect.Oracle10gDialect</property>
+        <property name="hibernate.connection.datasource">java:comp/env/jdbc/recAdminDB</property>
+        <property name="hibernate.current_session_context_class">thread</property>
+        
+        <!-- Mapping with model class containing annotations -->
+	<mapping class="com.fayaz.hibernate.pojo.Rating"/>
+	<mapping class="com.fayaz.hibernate.pojo.Customer"/>
+    </session-factory>
+</hibernate-configuration>
