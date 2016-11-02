@@ -3,8 +3,8 @@ package com.fayaz.recmain.recommender;
 import java.util.List;
 import com.fayaz.recmain.rest.pojo.RecommendationItem;
 
-public interface BaseRecommender {
+public abstract class BaseRecommender {
 	
-	public List<RecommendationItem> getRecommendations();
+	public abstract List<RecommendationItem> getRecommendations(long userId,long customerId,int count);
 
 }

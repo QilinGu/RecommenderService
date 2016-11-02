@@ -13,6 +13,7 @@ import java.util.List;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 
+import com.fayaz.recmain.recommender.AlgorithmType;
 import com.fayaz.recmain.rest.pojo.BaseResponse;
 import com.fayaz.recmain.rest.pojo.PostRating;
 import com.fayaz.recmain.rest.pojo.RatingItem;
@@ -35,8 +36,9 @@ public class RatingServiceClient {
 	public static void main(String[] args) throws JsonParseException, JsonMappingException, IOException {
 		
 		RatingServiceClient client = new RatingServiceClient();
-		client.prepareWebResource();
-		client.parseRatingsFile();
+		//client.prepareWebResource();
+		//client.parseRatingsFile();
+		client.enumCheck();
 	}
 	
 	private void prepareWebResource() {
@@ -101,6 +103,12 @@ public class RatingServiceClient {
 					.substring(1));
 		}
 		return sb.toString();
+	}
+	
+	private void enumCheck(){
+		AlgorithmType type;
+		type = AlgorithmType.getAlgorithmTypeInstance("Item-Item Collaborative Filtering");
+		//type = AlgorithmType.valueOf("Item-Item Collaborative Filtering");
 	}
 
 }

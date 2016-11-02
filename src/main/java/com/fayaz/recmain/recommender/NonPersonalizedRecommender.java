@@ -4,10 +4,10 @@ import java.util.List;
 
 import com.fayaz.recmain.rest.pojo.RecommendationItem;
 
-public class NonPersonalizedRecommender implements BaseRecommender{
+public class NonPersonalizedRecommender extends BaseRecommender{
 
 	@Override
-	public List<RecommendationItem> getRecommendations() {
+	public List<RecommendationItem> getRecommendations(long userId,long customerId,int count) {
 		// TODO Auto-generated method stub
 		return null;
 	}

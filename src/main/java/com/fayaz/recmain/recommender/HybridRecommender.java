@@ -3,10 +3,10 @@ package com.fayaz.recmain.recommender;
 import java.util.List;
 import com.fayaz.recmain.rest.pojo.RecommendationItem;
 
-public class HybridRecommender implements BaseRecommender {
+public class HybridRecommender extends BaseRecommender {
 
 	@Override
-	public List<RecommendationItem> getRecommendations() {
+	public List<RecommendationItem> getRecommendations(long userId,long customerId,int count) {
 		// TODO Auto-generated method stub
 		return null;
 	}

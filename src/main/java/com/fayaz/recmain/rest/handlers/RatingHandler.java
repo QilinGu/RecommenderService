@@ -37,16 +37,22 @@ public class RatingHandler {
 	
 	public List<RecommendationItem> getRecommendations(long userId,long customerId, String customerSecret) {
 		validateCustomer(customerId,customerSecret);
-		BaseRecommender recommender = getRecommender(userId,customerId);		
-		return recommender.getRecommendations();
+		BaseRecommender recommender = getRecommender(userId,customerId);
+		int noOfRecommendations = getRecommendationCount(customerId);
+		return recommender.getRecommendations(userId,customerId,noOfRecommendations);
 	}
 	
+	private int getRecommendationCount(long customerId) {
+		CustomerConfigDAO configDao = new CustomerConfigDAO();
+		CustomerConfig config = configDao.getConfigByCustomerId(customerId);
+		return (int) config.getReturnCount();
+	}
+
 	private BaseRecommender getRecommender(long userId,long customerId){
 		CustomerConfigDAO configDao = new CustomerConfigDAO();
 		AlgorithmDAO algoDao = new AlgorithmDAO();
 		CustomerConfig config = configDao.getConfigByCustomerId(customerId);
 		long algoId = config.getAlgoId();
-		System.out.println("algoId :"+algoId);
 		Algorithm algo = algoDao.getAlgorithmById(algoId);
 		AlgorithmType algoType = AlgorithmType.getAlgorithmTypeInstance(algo.getAlgoName());
 		return getRecommenderInstance(algoType);

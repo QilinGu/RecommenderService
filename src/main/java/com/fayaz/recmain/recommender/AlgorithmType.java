@@ -14,12 +14,15 @@ public enum AlgorithmType {
 		this.name = name;
 	}
 	
+	public String getName(){
+		return this.name;
+	}
+	
 	public static AlgorithmType getAlgorithmTypeInstance(String algoName){
-		AlgorithmType type1 = AlgorithmType.valueOf(algoName);
-		for(AlgorithmType type2:AlgorithmType.values()){
-			if(type2.equals(type1))
-				return type1;
-		}
-		throw new IllegalStateException("Invalid algoName passed");
+		for(AlgorithmType type:AlgorithmType.values()){
+			if(type.getName().equals(algoName))
+				return type;
+		}		
+		throw new IllegalStateException("Invalid algoName "+algoName+"passed");
 	}
 }
