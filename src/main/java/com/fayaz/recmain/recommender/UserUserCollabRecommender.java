@@ -15,6 +15,10 @@ import com.fayaz.recmain.recommender.deepconfig.CustomerDeepConfig;
 import com.fayaz.recmain.rest.pojo.RecommendationItem;
 
 public class UserUserCollabRecommender extends BaseRecommender{
+	
+	public UserUserCollabRecommender(){
+		System.out.println("New User user collab recommender");
+	}
 
 	@Override
 	public List<RecommendationItem> getRecommendations(long userId,long customerId,int count) throws RuntimeException{

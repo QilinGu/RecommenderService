@@ -18,6 +18,7 @@ import com.fayaz.recmain.recommender.ContentBasedRecommender;
 import com.fayaz.recmain.recommender.HybridRecommender;
 import com.fayaz.recmain.recommender.ItemItemCollabRecommender;
 import com.fayaz.recmain.recommender.NonPersonalizedRecommender;
+import com.fayaz.recmain.recommender.UserUserCollabRecommender;
 import com.fayaz.recmain.rest.pojo.RatingItem;
 import com.fayaz.recmain.rest.pojo.RecommendationItem;
 
@@ -62,7 +63,7 @@ public class RatingHandler {
 	public BaseRecommender getRecommenderInstance(AlgorithmType type){
 		switch(type){
 			case USER_COLLAB:
-				return new HybridRecommender();
+				return new UserUserCollabRecommender();
 			case ITEM_COLLAB:
 				return new ItemItemCollabRecommender();
 			case HYBRID:
