@@ -29,7 +29,7 @@ public class UserUserCollabRecommender extends BaseRecommender{
 			UserSimilarity similarity = config.getUserSimilarityMeasure(dataModel);
 			UserNeighborhood neighborhood = config.getThresholduserNeighbourhood(similarity,dataModel);
 			UserBasedRecommender recommender = config.getRecommender(dataModel,neighborhood,similarity);
-			List<RecommendedItem> recommendations = recommender.recommend(userId, 3);
+			List<RecommendedItem> recommendations = recommender.recommend(userId, count);
 			returnRecommendationList = new LinkedList<RecommendationItem>();
 			for (RecommendedItem recommendation : recommendations) {
 				RecommendationItem item = new RecommendationItem(recommendation.getItemID(),recommendation.getValue());

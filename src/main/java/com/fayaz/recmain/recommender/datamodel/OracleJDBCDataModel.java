@@ -59,7 +59,7 @@ public class OracleJDBCDataModel extends AbstractJDBCDataModel {
 	public OracleJDBCDataModel(long customerId) throws TasteException {
 		
 		this(lookupDataSource(), 				
-				"SELECT "+RATING_COL+" FROM "+RATINGS_TABLE+" WHERE "+USER_COL+"=? AND "+ ITEM_COL + "=? AND "+CUSTOMER_COL+" = ",  //preference SQL
+				"SELECT "+RATING_COL+" FROM "+RATINGS_TABLE+" WHERE "+USER_COL+"=? AND "+ ITEM_COL + "=? AND "+CUSTOMER_COL+" = "+customerId,  //preference SQL
 				"", //preference Time SQL ..not using
 				//getUserSql
 				"SELECT DISTINCT "+USER_COL+","+ITEM_COL+","+RATING_COL+" FROM "+RATINGS_TABLE+" WHERE "+USER_COL+"=? AND "+CUSTOMER_COL+"="+customerId+" ORDER BY "+ITEM_COL,
