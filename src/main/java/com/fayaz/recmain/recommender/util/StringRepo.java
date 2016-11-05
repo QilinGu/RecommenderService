@@ -5,6 +5,7 @@ public final class StringRepo {
 	public static final String INDEX_DIRECTORY = "D:\\Dissertation\\Server\\luceneIndex";
 	public static final String LOG4J_PROPERTIES_PATH = "log4j2.properties";
 	public static final String DATASOURCE_NAME = "jdbc/recAdminDB";
+	public static final String HIBERNATE_CONFIG_PATH = "hibernate.cfg.xml";
 	
 	public static final String LUCENE_CUSTOMER_ID = "customer_id";
 	public static final String LUCENE_ID = "id";

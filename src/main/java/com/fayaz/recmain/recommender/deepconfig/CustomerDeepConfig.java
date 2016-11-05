@@ -34,16 +34,16 @@ public class CustomerDeepConfig {
 	}
 
 	public UserNeighborhood getThresholduserNeighbourhood(
-			UserSimilarity similarity, ReloadFromJDBCDataModel dataModel) {
+			UserSimilarity similarity, DataModel dataModel) {
 		return new ThresholdUserNeighborhood(USER_THRESHOLD_NEIGHBOURHOOD, similarity, dataModel);
 	}
 
-	public UserBasedRecommender getUserRecommender(ReloadFromJDBCDataModel dataModel,
+	public UserBasedRecommender getUserRecommender(DataModel dataModel,
 			UserNeighborhood neighborhood, UserSimilarity similarity) {		
 		return new GenericUserBasedRecommender(dataModel, neighborhood, similarity);
 	}
 	
-	public ItemBasedRecommender getItemRecommender(ReloadFromJDBCDataModel dataModel,ItemSimilarity similarity) {		
+	public ItemBasedRecommender getItemRecommender(DataModel dataModel,ItemSimilarity similarity) {		
 		return new GenericItemBasedRecommender(dataModel, similarity);
 	}
 }
