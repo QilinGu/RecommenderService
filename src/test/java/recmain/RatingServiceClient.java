@@ -14,9 +14,9 @@ import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 
 import com.fayaz.recmain.recommender.AlgorithmType;
-import com.fayaz.recmain.rest.pojo.BaseResponse;
-import com.fayaz.recmain.rest.pojo.PostRating;
-import com.fayaz.recmain.rest.pojo.RatingItem;
+import com.fayaz.recmain.recommender.rest.pojo.BaseResponse;
+import com.fayaz.recmain.recommender.rest.pojo.PostRating;
+import com.fayaz.recmain.recommender.rest.pojo.RatingItem;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.api.client.config.ClientConfig;

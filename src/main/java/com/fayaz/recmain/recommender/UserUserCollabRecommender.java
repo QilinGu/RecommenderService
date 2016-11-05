@@ -5,15 +5,12 @@ import java.util.List;
 
 import org.apache.mahout.cf.taste.common.TasteException;
 import org.apache.mahout.cf.taste.impl.model.jdbc.ReloadFromJDBCDataModel;
-import org.apache.mahout.cf.taste.model.JDBCDataModel;
 import org.apache.mahout.cf.taste.neighborhood.UserNeighborhood;
 import org.apache.mahout.cf.taste.recommender.RecommendedItem;
 import org.apache.mahout.cf.taste.recommender.UserBasedRecommender;
 import org.apache.mahout.cf.taste.similarity.UserSimilarity;
-
-import com.fayaz.recmain.recommender.datamodel.OracleJDBCDataModel;
 import com.fayaz.recmain.recommender.deepconfig.CustomerDeepConfig;
-import com.fayaz.recmain.rest.pojo.RecommendationItem;
+import com.fayaz.recmain.recommender.rest.pojo.RecommendationItem;
 
 public class UserUserCollabRecommender extends BaseRecommender{
 	

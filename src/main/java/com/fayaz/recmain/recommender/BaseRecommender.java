@@ -1,6 +1,5 @@
 package com.fayaz.recmain.recommender;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -9,7 +8,7 @@ import org.apache.mahout.cf.taste.impl.model.jdbc.ReloadFromJDBCDataModel;
 import org.apache.mahout.cf.taste.model.JDBCDataModel;
 
 import com.fayaz.recmain.recommender.datamodel.OracleJDBCDataModel;
-import com.fayaz.recmain.rest.pojo.RecommendationItem;
+import com.fayaz.recmain.recommender.rest.pojo.RecommendationItem;
 
 public abstract class BaseRecommender {
 	

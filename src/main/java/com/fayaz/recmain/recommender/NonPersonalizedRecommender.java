@@ -2,7 +2,7 @@ package com.fayaz.recmain.recommender;
 
 import java.util.List;
 
-import com.fayaz.recmain.rest.pojo.RecommendationItem;
+import com.fayaz.recmain.recommender.rest.pojo.RecommendationItem;
 
 public class NonPersonalizedRecommender extends BaseRecommender{
 

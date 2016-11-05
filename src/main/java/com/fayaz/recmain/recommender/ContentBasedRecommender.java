@@ -10,7 +10,7 @@ import org.apache.mahout.cf.taste.similarity.ItemSimilarity;
 
 import com.fayaz.recmain.recommender.deepconfig.CustomerDeepConfig;
 import com.fayaz.recmain.recommender.similarity.ContentSimilarity;
-import com.fayaz.recmain.rest.pojo.RecommendationItem;
+import com.fayaz.recmain.recommender.rest.pojo.RecommendationItem;
 
 public class ContentBasedRecommender extends BaseRecommender{
 

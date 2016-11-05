@@ -8,26 +8,18 @@ import javax.sql.DataSource;
 import org.apache.mahout.cf.taste.common.TasteException;
 import org.apache.mahout.cf.taste.impl.model.jdbc.AbstractJDBCDataModel;
 
-public class OracleJDBCDataModel extends AbstractJDBCDataModel {	
-	
-	
-	private static final long serialVersionUID = 5951678728985695119L;
+import com.fayaz.recmain.recommender.util.StringRepo;
 
-	private static final String DATASOURCE_NAME="jdbc/recAdminDB";
-	
-	private static final String RATINGS_TABLE = "Ratings";
-	private static final String USER_COL = "User_id";
-	private static final String ITEM_COL = "Product_id";
-	private static final String CUSTOMER_COL = "Customer_id";
-	private static final String RATING_COL = "Rating";
-	
-	private static DataSource lookupDataSource() throws TasteException 
-	{
+public class OracleJDBCDataModel extends AbstractJDBCDataModel {
+
+	private static final long serialVersionUID = 5951678728985695119L;	
+
+	private static DataSource lookupDataSource() throws TasteException {
 		Context context = null;
-		try 
-		{
+		try {
 			context = new InitialContext();
-			return (DataSource) context.lookup("java:comp/env/" + DATASOURCE_NAME);
+			return (DataSource) context.lookup("java:comp/env/"
+					+ StringRepo.DATASOURCE_NAME);
 		} catch (NamingException ne) {
 			throw new TasteException(ne);
 		} finally {
@@ -35,7 +27,9 @@ public class OracleJDBCDataModel extends AbstractJDBCDataModel {
 				try {
 					context.close();
 				} catch (NamingException ne) {
-					System.out.println("Error while closing Context; continuing..."+ ne.getMessage());
+					System.out
+							.println("Error while closing Context; continuing..."
+									+ ne.getMessage());
 				}
 			}
 		}
@@ -50,46 +44,72 @@ public class OracleJDBCDataModel extends AbstractJDBCDataModel {
 			String getNumPreferenceForItemsSQL, String getMaxPreferenceSQL,
 			String getMinPreferenceSQL) {
 		super(dataSource, getPreferenceSQL, getPreferenceTimeSQL, getUserSQL,
-				getAllUsersSQL, getNumItemsSQL, getNumUsersSQL, setPreferenceSQL,
-				removePreferenceSQL, getUsersSQL, getItemsSQL, getPrefsForItemSQL,
-				getNumPreferenceForItemSQL, getNumPreferenceForItemsSQL,
-				getMaxPreferenceSQL, getMinPreferenceSQL);		
+				getAllUsersSQL, getNumItemsSQL, getNumUsersSQL,
+				setPreferenceSQL, removePreferenceSQL, getUsersSQL,
+				getItemsSQL, getPrefsForItemSQL, getNumPreferenceForItemSQL,
+				getNumPreferenceForItemsSQL, getMaxPreferenceSQL,
+				getMinPreferenceSQL);
 	}
 
 	public OracleJDBCDataModel(long customerId) throws TasteException {
-		
-		this(lookupDataSource(), 				
-				"SELECT "+RATING_COL+" FROM "+RATINGS_TABLE+" WHERE "+USER_COL+"=? AND "+ ITEM_COL + "=? AND "+CUSTOMER_COL+" = "+customerId,  //preference SQL
-				"", //preference Time SQL ..not using
-				//getUserSql
-				"SELECT DISTINCT "+USER_COL+","+ITEM_COL+","+RATING_COL+" FROM "+RATINGS_TABLE+" WHERE "+USER_COL+"=? AND "+CUSTOMER_COL+"="+customerId+" ORDER BY "+ITEM_COL,
+
+		this(lookupDataSource(), "SELECT " + StringRepo.RATING_COL + " FROM "
+				+ StringRepo.RATINGS_TABLE + " WHERE " + StringRepo.USER_COL + "=? AND " + StringRepo.ITEM_COL
+				+ "=? AND " + StringRepo.CUSTOMER_COL + " = " + customerId, // preference
+																	// SQL
+				"", // preference Time SQL ..not using
+				// getUserSql
+				"SELECT DISTINCT " + StringRepo.USER_COL + "," + StringRepo.ITEM_COL + ","
+						+ StringRepo.RATING_COL + " FROM " + StringRepo.RATINGS_TABLE + " WHERE "
+						+ StringRepo.USER_COL + "=? AND " + StringRepo.CUSTOMER_COL + "="
+						+ customerId + " ORDER BY " + StringRepo.ITEM_COL,
 				// getAllUsersSQL
-				"SELECT DISTINCT "+USER_COL+","+ITEM_COL+","+RATING_COL+" FROM "+RATINGS_TABLE+" WHERE "+CUSTOMER_COL+"="+customerId+" ORDER BY "+USER_COL+","+ITEM_COL,
-				//getNumItemsSQL
-				"SELECT COUNT(DISTINCT "+ITEM_COL+") FROM "+RATINGS_TABLE+" WHERE "+CUSTOMER_COL+"="+customerId, 
-				//getNumUsersSQL
-				"SELECT COUNT(DISTINCT "+USER_COL+") FROM "+RATINGS_TABLE+" WHERE "+CUSTOMER_COL+"="+customerId,
-				//setPreferenceSQL
-				"INSERT INTO " + RATINGS_TABLE + '(' + USER_COL + ',' + ITEM_COL + ',' + RATING_COL+","+CUSTOMER_COL
-	            + ") VALUES (?,?,?,"+customerId+") ON DUPLICATE KEY UPDATE " + RATING_COL + "=?",
-				//removePreferenceSQL
-	            "DELETE FROM " + RATINGS_TABLE + " WHERE " + USER_COL + "=? AND " + ITEM_COL + "=? AND "+CUSTOMER_COL+"="+customerId, 
-				//getUsersSQL
-	            "SELECT DISTINCT " + USER_COL + " FROM " + RATINGS_TABLE + " WHERE "+CUSTOMER_COL+"="+customerId+" ORDER BY " + USER_COL, 
-				//getItemsSQL
-				"SELECT DISTINCT " + ITEM_COL + " FROM " + RATINGS_TABLE + " WHERE "+CUSTOMER_COL+"="+customerId+" ORDER BY " + ITEM_COL,
-				//getPrefsForItemSQL
-				 "SELECT DISTINCT " + USER_COL + ", " + ITEM_COL + ", " + RATING_COL + " FROM " + RATINGS_TABLE
-		            + " WHERE " + ITEM_COL + "=? AND "+CUSTOMER_COL+"="+customerId+" ORDER BY " + USER_COL,
-				//getNumPreferenceForItemSQL
-		        "SELECT COUNT(1) FROM " + RATINGS_TABLE + " WHERE " + ITEM_COL + "=? AND "+CUSTOMER_COL+"="+customerId, 
-				//getNumPreferenceForItemsSQL
-		        "SELECT COUNT(1) FROM " + RATINGS_TABLE + " tp1 JOIN " + RATINGS_TABLE + " tp2 " + "USING ("
-            + USER_COL + ") WHERE tp1." + ITEM_COL + "=? and tp2." + ITEM_COL + "=? AND tp1."+CUSTOMER_COL+"="+customerId+" AND tp2."+CUSTOMER_COL+"="+customerId,
-				//getMaxPreferenceSQL
-            "SELECT MAX(" + RATING_COL + ") FROM " + RATINGS_TABLE+" WHERE "+CUSTOMER_COL+"="+customerId , 
-				//getMinPreferenceSQL
-            "SELECT MIN(" + RATING_COL + ") FROM " + RATINGS_TABLE+" WHERE "+CUSTOMER_COL+"="+customerId
-		);
+				"SELECT DISTINCT " + StringRepo.USER_COL + "," + StringRepo.ITEM_COL + ","
+						+ StringRepo.RATING_COL + " FROM " + StringRepo.RATINGS_TABLE + " WHERE "
+						+ StringRepo.CUSTOMER_COL + "=" + customerId + " ORDER BY "
+						+ StringRepo.USER_COL + "," + StringRepo.ITEM_COL,
+				// getNumItemsSQL
+				"SELECT COUNT(DISTINCT " + StringRepo.ITEM_COL + ") FROM " + StringRepo.RATINGS_TABLE
+						+ " WHERE " + StringRepo.CUSTOMER_COL + "=" + customerId,
+				// getNumUsersSQL
+				"SELECT COUNT(DISTINCT " + StringRepo.USER_COL + ") FROM " + StringRepo.RATINGS_TABLE
+						+ " WHERE " + StringRepo.CUSTOMER_COL + "=" + customerId,
+				// setPreferenceSQL
+				"INSERT INTO " + StringRepo.RATINGS_TABLE + '(' + StringRepo.USER_COL + ','
+						+ StringRepo.ITEM_COL + ',' + StringRepo.RATING_COL + "," + StringRepo.CUSTOMER_COL
+						+ ") VALUES (?,?,?," + customerId
+						+ ") ON DUPLICATE KEY UPDATE " + StringRepo.RATING_COL + "=?",
+				// removePreferenceSQL
+				"DELETE FROM " + StringRepo.RATINGS_TABLE + " WHERE " + StringRepo.USER_COL
+						+ "=? AND " + StringRepo.ITEM_COL + "=? AND " + StringRepo.CUSTOMER_COL + "="
+						+ customerId,
+				// getUsersSQL
+				"SELECT DISTINCT " + StringRepo.USER_COL + " FROM " + StringRepo.RATINGS_TABLE
+						+ " WHERE " + StringRepo.CUSTOMER_COL + "=" + customerId
+						+ " ORDER BY " + StringRepo.USER_COL,
+				// getItemsSQL
+				"SELECT DISTINCT " + StringRepo.ITEM_COL + " FROM " + StringRepo.RATINGS_TABLE
+						+ " WHERE " + StringRepo.CUSTOMER_COL + "=" + customerId
+						+ " ORDER BY " + StringRepo.ITEM_COL,
+				// getPrefsForItemSQL
+				"SELECT DISTINCT " + StringRepo.USER_COL + ", " + StringRepo.ITEM_COL + ", "
+						+ StringRepo.RATING_COL + " FROM " + StringRepo.RATINGS_TABLE + " WHERE "
+						+ StringRepo.ITEM_COL + "=? AND " + StringRepo.CUSTOMER_COL + "="
+						+ customerId + " ORDER BY " + StringRepo.USER_COL,
+				// getNumPreferenceForItemSQL
+				"SELECT COUNT(1) FROM " + StringRepo.RATINGS_TABLE + " WHERE " + StringRepo.ITEM_COL
+						+ "=? AND " + StringRepo.CUSTOMER_COL + "=" + customerId,
+				// getNumPreferenceForItemsSQL
+				"SELECT COUNT(1) FROM " + StringRepo.RATINGS_TABLE + " tp1 JOIN "
+						+ StringRepo.RATINGS_TABLE + " tp2 " + "USING (" + StringRepo.USER_COL
+						+ ") WHERE tp1." + StringRepo.ITEM_COL + "=? and tp2." + StringRepo.ITEM_COL
+						+ "=? AND tp1." + StringRepo.CUSTOMER_COL + "=" + customerId
+						+ " AND tp2." + StringRepo.CUSTOMER_COL + "=" + customerId,
+				// getMaxPreferenceSQL
+				"SELECT MAX(" + StringRepo.RATING_COL + ") FROM " + StringRepo.RATINGS_TABLE
+						+ " WHERE " + StringRepo.CUSTOMER_COL + "=" + customerId,
+				// getMinPreferenceSQL
+				"SELECT MIN(" + StringRepo.RATING_COL + ") FROM " + StringRepo.RATINGS_TABLE
+						+ " WHERE " + StringRepo.CUSTOMER_COL + "=" + customerId);
 	}
 }
