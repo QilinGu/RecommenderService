@@ -10,9 +10,9 @@
         <property name="hibernate.current_session_context_class">thread</property>
         
         <!-- Mapping with model class containing annotations -->
-	<mapping class="com.fayaz.hibernate.pojo.Rating"/>
-	<mapping class="com.fayaz.hibernate.pojo.Customer"/>
-	<mapping class="com.fayaz.hibernate.pojo.CustomerConfig"/>
-	<mapping class="com.fayaz.hibernate.pojo.Algorithm"/>
+	<mapping class="com.fayaz.recmain.recommender.hibernate.pojo.Rating"/>
+	<mapping class="com.fayaz.recmain.recommender.hibernate.pojo.Customer"/>
+	<mapping class="com.fayaz.recmain.recommender.hibernate.pojo.CustomerConfig"/>
+	<mapping class="com.fayaz.recmain.recommender.hibernate.pojo.Algorithm"/>
     </session-factory>
 </hibernate-configuration>

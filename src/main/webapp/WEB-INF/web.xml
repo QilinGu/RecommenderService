@@ -3,7 +3,7 @@
     <display-name>RecMain</display-name>
     <listener>
         <listener-class>
-             com.fayaz.hibernate.HibernateSessionFactoryListener
+             com.fayaz.recmain.recommender.hibernate.HibernateSessionFactoryListener
         </listener-class>
     </listener>
     <servlet>
@@ -13,7 +13,7 @@
         </servlet-class>
         <init-param>
             <param-name>com.sun.jersey.config.property.packages</param-name>
-            <param-value>com.fayaz.recmain.rest</param-value>
+            <param-value>com.fayaz.recmain.recommender.rest</param-value>
         </init-param>
         <init-param>
             <param-name>com.sun.jersey.spi.container.ContainerRequestFilters</param-name>
