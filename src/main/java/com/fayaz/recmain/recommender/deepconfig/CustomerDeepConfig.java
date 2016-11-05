@@ -1,13 +1,16 @@
 package com.fayaz.recmain.recommender.deepconfig;
 
 import org.apache.mahout.cf.taste.common.TasteException;
+import org.apache.mahout.cf.taste.impl.model.jdbc.ReloadFromJDBCDataModel;
 import org.apache.mahout.cf.taste.impl.neighborhood.ThresholdUserNeighborhood;
+import org.apache.mahout.cf.taste.impl.recommender.GenericItemBasedRecommender;
 import org.apache.mahout.cf.taste.impl.recommender.GenericUserBasedRecommender;
 import org.apache.mahout.cf.taste.impl.similarity.PearsonCorrelationSimilarity;
 import org.apache.mahout.cf.taste.model.DataModel;
-import org.apache.mahout.cf.taste.model.JDBCDataModel;
 import org.apache.mahout.cf.taste.neighborhood.UserNeighborhood;
+import org.apache.mahout.cf.taste.recommender.ItemBasedRecommender;
 import org.apache.mahout.cf.taste.recommender.UserBasedRecommender;
+import org.apache.mahout.cf.taste.similarity.ItemSimilarity;
 import org.apache.mahout.cf.taste.similarity.UserSimilarity;
 
 public class CustomerDeepConfig {
@@ -25,14 +28,22 @@ public class CustomerDeepConfig {
 	public UserSimilarity getUserSimilarityMeasure(DataModel model) throws TasteException{
 		return new PearsonCorrelationSimilarity(model);
 	}
+	
+	public ItemSimilarity getItemSimilarityMeasure(DataModel model) throws TasteException{
+		return new PearsonCorrelationSimilarity(model);
+	}
 
 	public UserNeighborhood getThresholduserNeighbourhood(
-			UserSimilarity similarity, JDBCDataModel dataModel) {
+			UserSimilarity similarity, ReloadFromJDBCDataModel dataModel) {
 		return new ThresholdUserNeighborhood(USER_THRESHOLD_NEIGHBOURHOOD, similarity, dataModel);
 	}
 
-	public UserBasedRecommender getRecommender(JDBCDataModel dataModel,
+	public UserBasedRecommender getUserRecommender(ReloadFromJDBCDataModel dataModel,
 			UserNeighborhood neighborhood, UserSimilarity similarity) {		
 		return new GenericUserBasedRecommender(dataModel, neighborhood, similarity);
+	}
+	
+	public ItemBasedRecommender getItemRecommender(ReloadFromJDBCDataModel dataModel,ItemSimilarity similarity) {		
+		return new GenericItemBasedRecommender(dataModel, similarity);
 	}
 }

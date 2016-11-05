@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.mahout.cf.taste.common.TasteException;
+import org.apache.mahout.cf.taste.impl.model.jdbc.ReloadFromJDBCDataModel;
 import org.apache.mahout.cf.taste.model.JDBCDataModel;
 import org.apache.mahout.cf.taste.neighborhood.UserNeighborhood;
 import org.apache.mahout.cf.taste.recommender.RecommendedItem;
@@ -23,15 +24,15 @@ public class UserUserCollabRecommender extends BaseRecommender{
 	@Override
 	public List<RecommendationItem> getRecommendations(long userId,long customerId,int count) throws RuntimeException{
 		List<RecommendationItem> returnRecommendationList = null;
-		try {
-			JDBCDataModel dataModel = new OracleJDBCDataModel(customerId);
+		try {			
+			ReloadFromJDBCDataModel dataModel = getDataModel(customerId);
 			CustomerDeepConfig config = new CustomerDeepConfig(customerId);
 			UserSimilarity similarity = config.getUserSimilarityMeasure(dataModel);
 			UserNeighborhood neighborhood = config.getThresholduserNeighbourhood(similarity,dataModel);
-			UserBasedRecommender recommender = config.getRecommender(dataModel,neighborhood,similarity);
-			List<RecommendedItem> recommendations = recommender.recommend(userId, count);
+			UserBasedRecommender recommender = config.getUserRecommender(dataModel,neighborhood,similarity);
+			List<RecommendedItem> recommendations = recommender.recommend(userId, count-1);
 			returnRecommendationList = new LinkedList<RecommendationItem>();
-			for (RecommendedItem recommendation : recommendations) {
+			for (RecommendedItem recommendation : recommendations) {				
 				RecommendationItem item = new RecommendationItem(recommendation.getItemID(),recommendation.getValue());
 				returnRecommendationList.add(item);
 			}

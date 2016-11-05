@@ -2,11 +2,11 @@ package com.fayaz.recmain.rest.pojo;
 
 public class RecommendationItem {
 	private long productId;
-	private float score;
+	private double score;
 	
 	public RecommendationItem(){}
 	
-	public RecommendationItem(long productId,float score){
+	public RecommendationItem(long productId,double score){
 		this.productId = productId;
 		this.score = score;
 	}
@@ -19,11 +19,11 @@ public class RecommendationItem {
 		this.productId = productId;
 	}
 
-	public float getScore() {
+	public double getScore() {
 		return score;
 	}
 
-	public void setScore(float score) {
+	public void setScore(double score) {
 		this.score = score;
 	}
 	
