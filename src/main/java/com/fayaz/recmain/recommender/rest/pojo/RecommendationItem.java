@@ -26,5 +26,9 @@ public class RecommendationItem {
 	public void setScore(double score) {
 		this.score = score;
 	}
+	@Override
+	public String toString(){
+		return "[ Product Id :"+this.getProductId()+" , "+"Score :"+this.getScore()+"]";
+	}
 	
 }

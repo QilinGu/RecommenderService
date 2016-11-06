@@ -1,12 +1,16 @@
 package com.fayaz.recmain.recommender.hibernate.dao;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+
 import com.fayaz.recmain.recommender.hibernate.HibernateUtil;
 import com.fayaz.recmain.recommender.hibernate.pojo.Rating;
+import com.fayaz.recmain.recommender.rest.pojo.RecommendationItem;
 
 public class RatingsDAO {
 	
@@ -126,5 +130,36 @@ public class RatingsDAO {
 			session.flush();
 			session.close();
 		}
+	}
+	
+	public List<RecommendationItem> getTopRatedProducts(long customerId,int minRatingsForProduct,int count){
+		Transaction trns = null;
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		List<RecommendationItem> returnList = new LinkedList<RecommendationItem>();
+		try {
+			trns = session.beginTransaction();
+			Query query = session.getNamedQuery("@SQL_GET_AVG_RATINGS_SORT_DESC");
+			query.setLong("customerId", customerId);
+			query.setInteger("minRatingsForProduct", minRatingsForProduct);
+			List<Object[]> results = query.list();
+			int i=1;
+			for(Object[] row :results){
+				RecommendationItem item = new RecommendationItem(Long.parseLong(row[0].toString()),Double.parseDouble(row[1].toString()));
+				returnList.add(item);
+				System.out.println(item.toString());
+				if(++i == count)
+					break;
+			}
+			
+		} catch (RuntimeException e) {
+			if (trns != null) {
+				trns.rollback();
+			}
+			e.printStackTrace();
+		}finally {
+			session.flush();
+			session.close();
+		}
+		return returnList;
 	}
 }

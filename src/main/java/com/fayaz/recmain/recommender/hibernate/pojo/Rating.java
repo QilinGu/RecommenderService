@@ -6,10 +6,32 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.NamedNativeQueries;
+import javax.persistence.NamedNativeQuery;
 import javax.persistence.Table;
 
 @Entity
 @Table(name="RATINGS")
+@NamedNativeQueries({ 
+	@NamedNativeQuery(name = "@SQL_GET_AVG_RATINGS_SORT_DESC", 
+			query = "SELECT product_id,"+
+					  "AVG(rating)avg_rating "+
+					  "FROM ratings "+
+					  "WHERE customer_id = :customerId "+
+					  "AND PRODUCT_ID   IN "+
+					    "(SELECT product_id "+
+					    "FROM "+
+					      "(SELECT product_id, "+
+					        "COUNT(product_id) counter "+
+					      "FROM ratings "+
+					      "WHERE customer_id = :customerId "+ 
+					      "GROUP BY product_id "+
+					      ") "+
+					    "WHERE counter> :minRatingsForProduct "+
+					    ") "+
+					  "GROUP BY product_id "+
+					  "ORDER BY avg_rating DESC")
+	})
 public class Rating implements Serializable {	
 
 	private static final long serialVersionUID = -8465004589570294305L;
