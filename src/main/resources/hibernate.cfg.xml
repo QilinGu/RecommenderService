@@ -14,5 +14,6 @@
 	<mapping class="com.fayaz.recmain.recommender.hibernate.pojo.Customer"/>
 	<mapping class="com.fayaz.recmain.recommender.hibernate.pojo.CustomerConfig"/>
 	<mapping class="com.fayaz.recmain.recommender.hibernate.pojo.Algorithm"/>
+	<mapping class="com.fayaz.recmain.recommender.hibernate.pojo.AdminUser"/>
     </session-factory>
 </hibernate-configuration>

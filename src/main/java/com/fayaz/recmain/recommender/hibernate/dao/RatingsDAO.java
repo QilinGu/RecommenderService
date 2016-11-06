@@ -40,6 +40,7 @@ public class RatingsDAO {
 	}
 
 	
+	@SuppressWarnings("unchecked")
 	public List<Rating> getAllRatings() {
 
 		boolean error = false;
@@ -141,6 +142,7 @@ public class RatingsDAO {
 			Query query = session.getNamedQuery("@SQL_GET_AVG_RATINGS_SORT_DESC");
 			query.setLong("customerId", customerId);
 			query.setInteger("minRatingsForProduct", minRatingsForProduct);
+			@SuppressWarnings("unchecked")
 			List<Object[]> results = query.list();
 			int i=1;
 			for(Object[] row :results){
