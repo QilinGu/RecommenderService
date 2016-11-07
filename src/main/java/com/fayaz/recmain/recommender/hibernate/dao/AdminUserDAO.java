@@ -8,20 +8,20 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import com.fayaz.recmain.recommender.hibernate.HibernateUtil;
-import com.fayaz.recmain.recommender.hibernate.pojo.Algorithm;
+import com.fayaz.recmain.recommender.hibernate.pojo.AdminUser;
 
-public class AlgorithmDAO {
+public class AdminUserDAO {
 	
 	private static final String INTERNAL_ERROR = "Internal Error";
 
-	public void addAlgorithm(Algorithm algo) {
+	public void addAdminUser(AdminUser user) {
 		boolean error = false;
 
 		Transaction trns = null;
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		try {
 			trns = session.beginTransaction();
-			session.save(algo);
+			session.save(user);
 			session.getTransaction().commit();
 		} catch (RuntimeException e) {
 			if (trns != null) {
@@ -39,15 +39,14 @@ public class AlgorithmDAO {
 
 	
 	@SuppressWarnings("unchecked")
-	public List<Algorithm> getAllAlgorithms() {
+	public List<AdminUser> getAllAdminUsers() {
 
 		boolean error = false;
-		
-		List<Algorithm> algos = new ArrayList<Algorithm>();
+		List<AdminUser> users = new ArrayList<AdminUser>();
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		
 		try {			
-			algos = session.createQuery("from Algorithm").list();
+			users = session.createQuery("from AdminUser").list();
 		} catch (RuntimeException e) {
 			e.printStackTrace();
 			error = true;
@@ -58,18 +57,19 @@ public class AlgorithmDAO {
 			if (error)
 				throw new RuntimeException(INTERNAL_ERROR);
 		}
-		return algos;
+		return users;
 	}
 
-	public int deleteAlgorithm(String algoName) {
+	public int deleteAdminUser(String username) {
 		boolean error = false;
+
 		int rowCount = -1;
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		try {
 			Transaction tx = session.beginTransaction();
-			String hql = "delete from Algorithm where algoName = :algoname";
+			String hql = "delete from AdminUser where username = :username";
 			Query query = session.createQuery(hql);
-			query.setString("algoname", algoName);
+			query.setString("username", username);
 			rowCount = query.executeUpdate();
 			tx.commit();
 		} catch (RuntimeException e) {
@@ -85,14 +85,14 @@ public class AlgorithmDAO {
 		return rowCount;
 	}
 
-	public void updateAlgorithm(Algorithm algo) {
+	public void updateAdminUser(AdminUser user) {
 		boolean error = false;
 
 		Transaction trns = null;
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		try {
 			trns = session.beginTransaction();
-			session.update(algo);
+			session.update(user);
 			session.getTransaction().commit();
 		} catch (RuntimeException e) {
 			if (trns != null) {
@@ -105,50 +105,48 @@ public class AlgorithmDAO {
 			session.flush();
 			session.close();
 		}
-	}	
-
-	public Algorithm getAlgorithmByName(String algoName) {
-		boolean error = false;
-		String errMessage = "";
-
-		Algorithm algo = null;
-		Session session = HibernateUtil.getSessionFactory().openSession();
-		try {
-			String queryString = "from Algorithm where algoName = :algoname";
-			Query query = session.createQuery(queryString);
-			query.setString("algoname", algoName);
-			algo = (Algorithm) query.uniqueResult();
-		} catch (RuntimeException e) {
-			e.printStackTrace();
-		} finally {
-			session.flush();
-			session.close();
-			if (error)
-				throw new RuntimeException(errMessage);
-		}
-		return algo;
 	}
 	
-	public Algorithm getAlgorithmById(long algoId) {
+	public AdminUser getAdminUserByEmail(String email) {
 		boolean error = false;
-		String errMessage = "";
-
-		Algorithm algo = null;
+		AdminUser user = null;
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		try {
-			String queryString = "from Algorithm where algoId = :algoid";
+			String queryString = "from AdminUser where email = :email";
 			Query query = session.createQuery(queryString);
-			query.setLong("algoid", algoId);
-			algo = (Algorithm) query.uniqueResult();
+			query.setString("email", email);
+			user = (AdminUser) query.uniqueResult();
 		} catch (RuntimeException e) {
 			e.printStackTrace();
 		} finally {
 			session.flush();
 			session.close();
 			if (error)
-				throw new RuntimeException(errMessage);
+				throw new RuntimeException(INTERNAL_ERROR);
 		}
-		return algo;
+		return user;
+	}
+	
+	
+
+	public AdminUser getAdminUserByUsername(String username) {
+		boolean error = false;
+		AdminUser user = null;
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		try {
+			String queryString = "from AdminUser where username = :username";
+			Query query = session.createQuery(queryString);
+			query.setString("username", username);
+			user = (AdminUser) query.uniqueResult();
+		} catch (RuntimeException e) {
+			e.printStackTrace();
+		} finally {
+			session.flush();
+			session.close();
+			if (error)
+				throw new RuntimeException(INTERNAL_ERROR);
+		}
+		return user;
 	}
 
 }
